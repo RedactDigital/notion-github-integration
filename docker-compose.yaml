@@ -1,0 +1,13 @@
+# Initializes a new nodejs project with docker
+
+version: '3.7'
+services:
+  app:
+    image: node:19.8.1
+    user: node:node
+    container_name: notion-app
+    restart: unless-stopped
+    working_dir: /home/node/app
+    command: sh -c "npm install --no-audit && npm run dev"
+    volumes:
+      - ./:/home/node/app
