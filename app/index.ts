@@ -42,5 +42,5 @@ const getFromGithub = async () => {
 };
 
 (async () => {
-  new CronJob(await repeat.everyMinute('5'), getFromGithub).start();
+  new CronJob(await repeat.everyMinute('5'), getFromGithub);
 })();

@@ -204,7 +204,7 @@ class CronHelper implements CronUtilInterface {
   everyMinute = async (minutes?: string): Promise<string> => {
     let expression = '0 * * * * *';
     if (minutes) expression = `0/${minutes} * * * * *`;
-    return this._convertToUtc(expression);
+    return expression;
   };
 
   /**
@@ -467,6 +467,7 @@ class CronHelper implements CronUtilInterface {
     let hours = parseInt(originalHours) + parseInt(offset);
     if (hours > 23) hours = hours - 24; // We don't want to go over 24 hours
     if (hours < 0) hours = hours + 24; // We don't want to go under 0 hours
+
     return `${originalSeconds} ${originalMinutes} ${hours} ${originalDayOfMonth} ${originalMonth} ${originalDayOfWeek}`;
   };
 }
