@@ -22,12 +22,12 @@ export default async ({ name, status, githubNumber, githubIssue, githubRepo, peo
         },
         Assignee: {
           type: 'people',
-          people,
+          people: people || [],
         },
         Status: {
           type: 'select',
           select: {
-            name: status,
+            name: status || 'Backlog',
           },
         },
         'Github Number': {

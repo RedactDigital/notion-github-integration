@@ -20,7 +20,6 @@ const getFromGithub = async () => {
         githubIssue: d.url,
         githubRepo: d.repository_url,
       };
-
       // Manage Status
       if (d.milestone) issue.status = d.milestone.title as PageData['status'];
       if (d.state === 'closed') issue.status = 'Closed';

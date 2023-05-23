@@ -203,7 +203,7 @@ class CronHelper implements CronUtilInterface {
    */
   everyMinute = async (minutes?: string): Promise<string> => {
     let expression = '0 * * * * *';
-    if (minutes) expression = `0/${minutes} * * * * *`;
+    if (minutes) expression = `0 */${minutes} * * * *`;
     return expression;
   };
 
