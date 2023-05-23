@@ -46,7 +46,10 @@ export default async ({ name, status, githubNumber, githubIssue, githubRepo, peo
       /* eslint-enable */
     });
 
-    if (newPage) return true;
+    if (newPage) {
+      console.log(`Created new page: ${name}`);
+      return true;
+    }
     throw new Error('Error creating page');
   } catch (error) {
     throw error;

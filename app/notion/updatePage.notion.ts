@@ -44,7 +44,10 @@ export default async (pageId: string, { name, status, githubNumber, githubIssue,
       /* eslint-enable */
     });
 
-    if (res) return true;
+    if (res) {
+      console.log(`Page ${name} updated`);
+      return true;
+    }
     throw new Error('Error updating page');
   } catch (error) {
     throw error;

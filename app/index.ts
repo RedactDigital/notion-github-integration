@@ -8,39 +8,43 @@ import createPageNotion from './notion/createPage.notion';
 import { repeat } from './util/cron.util';
 
 const getFromGithub = async () => {
-  const github = new Github({ repo: 'vpm-solutions/api' });
+  try {
+    const github = new Github({ repo: 'vpm-solutions/api' });
 
-  const data = await github.getIssues();
+    const data = await github.getIssues();
 
-  for (const d of data) {
-    const issue: PageData = {
-      name: d.title,
-      githubNumber: d.number,
-      githubIssue: d.url,
-      githubRepo: d.repository_url,
-    };
+    for (const d of data) {
+      const issue: PageData = {
+        name: d.title,
+        githubNumber: d.number,
+        githubIssue: d.url,
+        githubRepo: d.repository_url,
+      };
 
-    // Manage Status
-    if (d.milestone) issue.status = d.milestone.title as PageData['status'];
-    if (d.state === 'closed') issue.status = 'Closed';
+      // Manage Status
+      if (d.milestone) issue.status = d.milestone.title as PageData['status'];
+      if (d.state === 'closed') issue.status = 'Closed';
 
-    // Description
-    if (d.body) issue.description = d.body;
+      // Description
+      if (d.body) issue.description = d.body;
 
-    // People
-    if (d.assignees) {
-      for (const person of d.assignees.map((assignee: any) => assignee.login)) {
-        const githubUser = await github.getUsers(person);
-        issue.people = [...(await findUsersNotion(githubUser.login))];
+      // People
+      if (d.assignees) {
+        for (const person of d.assignees.map((assignee: any) => assignee.login)) {
+          const githubUser = await github.getUsers(person);
+          issue.people = [...(await findUsersNotion(githubUser.login))];
+        }
       }
-    }
 
-    const pageExists = await findPageNotion(issue.githubNumber);
-    if (pageExists) await updatePageNotion(pageExists.id, issue);
-    else await createPageNotion(issue);
+      const pageExists = await findPageNotion(issue.githubNumber);
+      if (pageExists) await updatePageNotion(pageExists.id, issue);
+      else await createPageNotion(issue);
+    }
+  } catch (error) {
+    console.error(error);
   }
 };
 
 (async () => {
-  new CronJob(await repeat.everyMinute('5'), getFromGithub);
+  new CronJob(await repeat.everyMinute('5'), getFromGithub).start();
 })();
